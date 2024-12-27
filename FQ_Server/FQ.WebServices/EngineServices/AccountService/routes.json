@@ -1,0 +1,13 @@
+{
+  "CreateGroup": "Group",
+  "GetGroup": "Group",
+  "RemoveGroup": "Group",
+  "RemoveRelatedRewards": "Reward",
+  "CreateUserStartingReward": "Reward",
+  "CreateHistoryEvent": "Event",
+  "CreateGroupStartingTasks": "Task",
+  "CreateUserStartingTask": "Task",
+  "UpdateRelatedTasks": "Task",
+  "SendMessage": "Mail",
+  "UnregisterDeviceInner": "Notification"
+}

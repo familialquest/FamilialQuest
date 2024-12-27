@@ -1,0 +1,11 @@
+{
+  "AddReward": "INSERT INTO Rewards (ID, GroupID, Title, Description, Cost, Img, Creator, AvailableFor, Status, CreationDate, PurchaseDate, HandedDate, ModificationTime) VALUES (@ID, @GroupID, @Title, @Description, @Cost, @Img, @Creator, @AvailableFor, @Status, @CreationDate, @PurchaseDate, @HandedDate, @ModificationTime);",
+  "UpdateReward": "UPDATE Rewards SET Title = @Title, Description = @Description, Cost = @Cost, Img = @Img, Status = @Status, PurchaseDate = @PurchaseDate, HandedDate = @HandedDate, ModificationTime = @ModificationTime WHERE ID = @ID AND GroupID = @GroupID;",
+  "RemoveReward": "UPDATE Rewards SET Status = @RemovedStatus, ModificationTime = @ModificationTime WHERE ID = @ID AND GroupID = @GroupID;",
+  "RemoveRelatedReward": "UPDATE Rewards SET Status = @RemovedStatus, ModificationTime = @ModificationTime WHERE AvailableFor = @RemovingUser AND GroupID = @GroupID;",
+  "GetRelatedReward": "SELECT ID FROM Rewards WHERE AvailableFor = @RemovingUser AND GroupID = @GroupID AND Status != @RemovedStatus;",
+  "GetAllRewards": "SELECT ID, GroupID, Title, Description, Cost, Img, Creator, AvailableFor, Status, CreationDate, PurchaseDate, HandedDate FROM Rewards WHERE GroupID = @GroupID AND Status != @RemovedStatus ORDER BY ModificationTime DESC;",
+  "GetRewardsById": "SELECT ID, GroupID, Title, Description, Cost, Img, Creator, AvailableFor, Status, CreationDate, PurchaseDate, HandedDate FROM Rewards WHERE GroupID = @GroupID AND {0} ORDER BY ModificationTime DESC;",
+  "GetRewardsCount": "SELECT COUNT(*) FROM Rewards WHERE GroupID = @GroupID AND Status != @StatusDeleted;",
+  "GetAvailableRewardsCount": "SELECT COUNT(*) FROM Rewards WHERE GroupID = @GroupID AND Status = @StatusAvailable;"
+}

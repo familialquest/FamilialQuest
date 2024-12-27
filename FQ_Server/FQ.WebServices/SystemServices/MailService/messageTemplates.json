@@ -1,0 +1,10 @@
+﻿{
+  "CreateAccountConfirm": {
+    "title": "{0} ваш код FamilialQuest",
+    "body": "<table style='width: 430px; font-family: Arial,Helvetica,sans-serif;' align='center'><tr><td><p style='margin:10px 0 10px 0;color:#565a5c;font-size:18px'>Добро пожаловать в FamilialQuest!</p><p style='margin:10px 0 10px 0;color:#565a5c;font-size:18px'>Чтобы завершить создание аккаунта, введите этот код подтверждения в приложении:</p></td></tr><tr><td style='padding:10px;color:#565a5c;font-size:32px;font-weight:500;text-align:center;padding-bottom:25px'>{0}</td></tr><tr><td style='color:#abadae;font-size:11px;margin:0 auto 5px auto'>© FamilialQuest</td></tr><tr><td style='color:#abadae;font-size:11px;margin:0 auto 5px auto'>Это сообщение отправлено для <u>{1}</u></td></tr></table>"
+  },
+  "ResetPasswordConfirm": {
+    "title": "{0} ваш код FamilialQuest",
+    "body": "<table style='width: 430px; font-family: Arial,Helvetica,sans-serif;' align='center'><tr><td><p style='margin:10px 0 10px 0;color:#565a5c;font-size:18px'>Чтобы завершить восстановление доступа к аккаунту FamilialQuest, введите этот код подтверждения в приложении:</p></td></tr><tr><td style='padding:10px;color:#565a5c;font-size:32px;font-weight:500;text-align:center;padding-bottom:25px'>{0}</td></tr><tr><td style='color:#abadae;font-size:11px;margin:0 auto 5px auto'>© FamilialQuest</td></tr><tr><td style='color:#abadae;font-size:11px;margin:0 auto 5px auto'>Это сообщение отправлено для <u>{1}</u></td></tr></table>"
+  }
+}

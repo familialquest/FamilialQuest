@@ -1,0 +1,78 @@
+version: '3.4'
+
+services:
+
+  routeservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_HTTPS_PORT=44300
+      #- Kestrel__Certificates__Default__Path=/root/.aspnet/https/cert-gateservice.pfx
+      #- Kestrel__Certificates__Default__Password=[TODO]
+    ports:
+      - "65300:80"
+      - "443:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro            
+     
+     
+  mailservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - FQ_MAIL_OUTGOING_MAILBOX=no-reply@familialquest.com
+      - FQ_MAIL_OUTGOING_MAILBOX_PASSWORD=[TODO]
+      - FQ_MAIL_OUTGOING_MAILBOX_DISPLAYNAME=no-reply@familialquest.com
+      - FQ_MAIL_SMTP_SERVER_ADDRESS=http://postfix
+      - FQ_MAIL_SMTP_SERVER_PORT=25
+      - FQ_MAIL_SMTP_SERVER_TIMEOUT=30
+      - FQ_MAIL_SMTP_SERVER_SSL=false
+    ports:
+      - "65302:80"
+
+  eventservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "65305:80"
+      
+  notificationservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/familialquestapp-firebase-adminsdk-ptnd6-9631ba9b23.json
+    ports:
+      - "65306:80"
+
+  taskservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - FQ_TASK_PERIODIC_CLOSE_DELAY=60
+    ports:
+      - "65310:80"
+                  
+  accountservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - FQ_ACCOUNT_TOKEN_TTL=43200
+      - FQ_ACCOUNT_TEMP_ACCOUNT_TTL=300
+    ports:
+      - "65320:80"
+
+  groupservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "65322:80"
+
+  rewardservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "65323:80"

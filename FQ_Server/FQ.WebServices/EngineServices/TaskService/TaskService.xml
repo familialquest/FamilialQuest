@@ -1,0 +1,562 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TaskService</name>
+    </assembly>
+    <members>
+        <member name="M:TaskService.Controllers.TaskController.CreateTaskController(CommonLib.FQRequestInfo)">
+            <summary>
+            Контроллер Action-а создания новой задачи
+            </summary>
+            <param name="ri"></param>
+            <returns>Информация о созданной задаче</returns>
+        </member>
+        <member name="M:TaskService.Controllers.TaskController.GetTasksController(CommonLib.FQRequestInfo)">
+            <summary>
+            Контроллер Action-а получения задач
+            </summary>
+            <param name="ri"></param>
+            <returns>Информация о созданной задаче</returns>
+        </member>
+        <member name="M:TaskService.Controllers.TaskController.SearchTasksController(CommonLib.FQRequestInfo)">
+            <summary>
+            Контроллер Action-а поиска задач
+            </summary>
+            <param name="ri"></param>
+            <returns>Информация о найденной задаче</returns>
+        </member>
+        <member name="M:TaskService.Controllers.TaskController.RemoveTasksController(CommonLib.FQRequestInfo)">
+            <summary>
+            Контроллер Action-а удаления задач
+            </summary>
+            <param name="ri"></param>
+            <returns>Информация о созданной задаче</returns>
+        </member>
+        <member name="M:TaskService.Controllers.TaskController.RemoveSearchTasksController(CommonLib.FQRequestInfo)">
+            <summary>
+            Контроллер Action-а поиска задач
+            </summary>
+            <param name="ri"></param>
+            <returns>Информация о созданной задаче</returns>
+        </member>
+        <member name="M:TaskService.Controllers.TaskController.UpdateTasksController(CommonLib.FQRequestInfo)">
+            <summary>
+            Контроллер Action-а изменения задач
+            </summary>
+            <param name="ri"></param>
+            <returns>Информация о созданной задаче</returns>
+        </member>
+        <member name="M:TaskService.Controllers.TaskController.UpdateTaskStatusController(CommonLib.FQRequestInfo)">
+            <summary>
+            Контроллер Action-а изменения статуса задач
+            </summary>
+            <param name="ri"></param>
+            <returns>Информация о задачах</returns>
+        </member>
+        <member name="T:TaskService.Models.BaseTask">
+            <summary>
+            Базовая задача
+            </summary>
+        </member>
+        <member name="M:TaskService.Models.BaseTask.TryDeserialize(System.String)">
+            <summary>
+            Десериализация из JSON
+            </summary>
+            <param name="data">Строка JSON</param>
+            <returns></returns>
+        </member>
+        <member name="M:TaskService.Models.BaseTask.ToDictionary(TaskService.Models.BaseTask)">
+            <summary>
+            Функция заполняет дикт полями задачи, значения которых отличаются от "по умолчанию"
+            </summary>
+            <param name="task">Задача</param>
+            <returns></returns>
+        </member>
+        <member name="M:TaskService.Models.BaseTask.ToDictionaryFull(TaskService.Models.BaseTask)">
+            <summary>
+            Функция получает дикт всех полей.         
+            </summary>
+            <param name="task">Задача</param>
+            <returns></returns>
+        </member>
+        <member name="M:TaskService.Models.BaseTask.FromDictionary(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Создание задачи и заполнение значениями из дикта
+            </summary>
+            <param name="dict"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TaskService.Models.DBWorker">
+            <summary>
+            Класс для работы с запросами к сервису БД
+            </summary>
+        </member>
+        <member name="M:TaskService.Models.DBWorker.AddTask(TaskService.Models.BaseTask)">
+            <summary>
+            Добавление строки с новой задачей в таблицу с задачами.
+            </summary>
+            <param name="newTask"></param>
+            <exception cref="T:System.ArgumentNullException"/>
+            <exception cref="T:System.Exception">Ошибка при работе с БД</exception>
+        </member>
+        <member name="M:TaskService.Models.DBWorker.GetTasks(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Получение задачи по ее идентификатору.
+            </summary>
+            <param name="taskIds">Идентификатор задачи</param>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.Exception">Ошибка при работе с БД</exception>
+        </member>
+        <member name="M:TaskService.Models.DBWorker.GetTasksCount(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Поиск задач по значениям полей.
+            </summary>
+            <param name="searchParams">Идентификатор задачи</param>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.Exception">Ошибка при работе с БД</exception>
+        </member>
+        <member name="M:TaskService.Models.DBWorker.GetTasks(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Поиск задач по параметрам
+            </summary>
+            <param name="searchParams">Набор параметров для поиска</param>
+            <returns>Список найденных задач</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.Exception">Ошибка при работе с БД</exception>
+        </member>
+        <member name="M:TaskService.Models.DBWorker.GetUserTasks(CommonLib.FQRequestInfo,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Поиск задач по параметрам
+            </summary>
+            <param name="searchParams">Набор параметров для поиска</param>
+            <returns>Список найденных задач</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.Exception">Ошибка при работе с БД</exception>
+        </member>
+        <member name="M:TaskService.Models.DBWorker.GetRelatedTasks(System.Guid,System.Guid)">
+            <summary>
+            Получение IDшников всех задач, где удаляемы юзер Executor или единственный AvailableFor
+            </summary>
+            <param name="groupId"></param>
+            <param name="removingUserId"></param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:TaskService.Models.DBWorker.GetExpiredTasks" -->
+        <member name="M:TaskService.Models.DBWorker.UpdateRelatedTasks(System.Guid,System.Guid)">
+            <summary>
+            Удаление удаляемого юзера из всех AvailableFor
+            </summary>
+            <param name="groupId"></param>
+            <param name="removingUserId"></param>
+        </member>
+        <member name="M:TaskService.Models.DBWorker.UpdateTask(System.Guid,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Обновление полей задачи
+            </summary>
+            <param name="targetTaskId">Идентификатор обновляемой задачи</param>
+            <param name="newParams">Набор полей для обновления</param>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.Exception">Ошибка при работе с БД</exception>
+        </member>
+        <member name="M:TaskService.Models.DBWorker.DeleteTasks(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Удаление задач по параметрам
+            </summary>
+            <param name="searchParams">Параметры поиска удаляемых задач</param>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.Exception">Ошибка при работе с БД</exception>
+        </member>
+        <member name="M:TaskService.Models.DBWorker.DeleteTasks(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Удаление задач по их идентификаторам
+            </summary>
+            <param name="targetTaskIdList">Список идентификаторов задач для удаления</param>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.Exception">Ошибка при работе с БД</exception>
+        </member>
+        <member name="T:TaskService.Models.BaseTaskType">
+            <summary>
+            Существующие типы задач. 
+            Конвертируем в int.
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskType.Base">
+            <summary>
+            Базовая стандартная задача
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskType.Custom">
+            <summary>
+            Нестандартная задача
+            </summary>
+        </member>
+        <member name="T:TaskService.Models.BaseTaskStatus">
+            <summary>
+            Возможные значения статуса задачи.
+            Конвертируем в int.
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.Created">
+            <summary>
+            Когда задача только создана, но не ушла "в использование"
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.Assigned">
+            <summary>
+            Когда задача была только назначена пользователю или группе
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.Accepted">
+            <summary>
+            Когда задача была принята пользователем или группой. Выполнено не начиналось.
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.InProgress">
+            <summary>
+            Когда задача начала выполняться пользователем или группой.
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.Completed">
+            <summary>
+            Когда задача была завершена пользователем или группой (неважно: успешно или нет).
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.PendingReview">
+            <summary>
+            Когда задача была отправлена на проверку "заказчикам".
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.Successed">
+            <summary>
+            Когда результат выполнения задачи был рассмотрен и оказался удовлетворительным.
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.Closed">
+            <summary>
+            Когда награда была "выплачена". 
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.Deleted">
+            <summary>
+            Когда задача была удалена до того, как она ушла "в использование".
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.Declined">
+            <summary>
+            Когда задача была отклонена назначенным исполнителем
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.AvailableUntilPassed">
+            <summary>
+            Когда время, выделенное на принятие задача, истекло. (Глобальнее - закрытие задачи,когда выполнение больше не актуально, и манипуляции с начислением\штрафом не требуются)
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.SolutionTimeOver">
+            <summary>
+            Когда время, выделенное на выполнение задачи, истекло.
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.Canceled">
+            <summary>
+            Когда задача была отменена уже после назначения пользователю
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.Failed">
+            <summary>
+            Когда результат выполнения задачи был рассмотрен и оказался НЕудовлетворительным.
+            </summary>
+        </member>
+        <member name="F:TaskService.Models.BaseTaskStatus.None">
+            <summary>
+            Статус неопределен
+            </summary>
+        </member>
+        <member name="M:TaskService.Models.TaskStatusRelations.ValidateTransition(TaskService.Models.BaseTaskStatus,TaskService.Models.BaseTaskStatus)">
+            <summary>
+            Проверка возможности перехода из одного состояния в другое.
+            </summary>
+            <param name="current">Текущее состояние</param>
+            <param name="next">Состояние, в которое нужно осуществить переход</param>
+            <returns>true - если переход возможен</returns>
+        </member>
+        <member name="M:TaskService.Models.Utils.StatusFromString(System.String)">
+            <summary>
+            Конвертирование <see cref="T:TaskService.Models.BaseTaskStatus"/> из строки.
+            </summary>
+            <param name="statusString">Строка, содержащая либо int-представление статуса, либо строка (название) статуса.</param>
+            <returns>В случае ошибки - статус <see cref="F:TaskService.Models.BaseTaskStatus.None"/></returns>
+        </member>
+        <member name="M:TaskService.Models.Utils.StatusToString(TaskService.Models.BaseTaskStatus)">
+            <summary>
+            Конвертирование <see cref="T:TaskService.Models.BaseTaskStatus"/> в строку, содержащую название статуса.
+            </summary>
+            <param name="status">Статус</param>
+            <returns>В случае ошибки - пустая строка</returns>
+        </member>
+        <member name="T:TaskService.Program">
+            <summary>
+            Main program class
+            </summary>
+        </member>
+        <member name="M:TaskService.Program.Main(System.String[])">
+            <summary>
+            Main
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:TaskService.Program.CreateWebHostBuilder(System.String[])">
+            <summary>
+            Create webhost builder
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TaskService.Services.ITaskService">
+            <summary>
+            Интерфейс сервиса работы с задачами
+            </summary>
+        </member>
+        <member name="M:TaskService.Services.ITaskService.CreateTask(CommonLib.FQRequestInfo,System.String,System.String,System.Int32,System.Int32,System.DateTime,System.TimeSpan,System.Int32,System.Guid,System.Guid)">
+            <summary>
+            Создание задачи
+            </summary>
+            <param name="name">Имя/заголовок задачи</param>
+            <param name="description">Описание задачи</param>
+            <param name="cost">Стоимость. Может равняться 0.</param>
+            <param name="penalty">Штраф. Может равняться 0.</param>
+            <param name="availableUntil">Время жизни задачи</param>
+            <param name="solutionTime">Время решения задачи. Не может быть меньше AvailableUntil.</param>
+            <param name="speedBonus">Бонус за преждевременное выполнение. Может равняться 0.</param>
+            <param name="creator">Владелец/создатель задачи</param>
+            <param name="executor">Получатель задачи</param>
+            <returns>ID новой задачи</returns>
+        </member>
+        <member name="M:TaskService.Services.ITaskService.CreateTask(CommonLib.FQRequestInfo,TaskService.Models.BaseTask)">
+            <summary>
+            Создание новой задачи из параметров другой.
+            Поля:<list type="bullet">
+            <item>Status</item>
+            <item>CreationDate</item>
+            <item>CompletionDate</item>
+            <item>ModificationTime</item>
+            </list>
+            создаются новые.
+            </summary>
+            <param name="newTask"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TaskService.Services.ITaskService.UpdateTask(System.Guid,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Обновление информации о задаче.
+            </summary>
+            <remarks>
+            Поля <see cref="F:TaskService.Models.BaseTask.Id"/> и <see cref="F:TaskService.Models.BaseTask.Creator"/> не изменяются.
+            Поле <see cref="F:TaskService.Models.BaseTask.Status"/> обновляется через функцию <see cref="!:UpdateTaskStatus(Guid, TaskStatus)"/>.
+            Поля <see cref="F:TaskService.Models.BaseTask.CreationDate"/>, <see cref="F:TaskService.Models.BaseTask.CompletionDate"/> не изменяются напрямую.
+            Поле <see cref="F:TaskService.Models.BaseTask.ModificationTime"/> изменяется автоматически.
+            </remarks>
+            <param name="taskId">Идентификатор обновляемой задачи</param>
+            <param name="newParams">Набор новых значений полей задачи</param>        
+            <returns>Идентификатор измененной задачи</returns>
+        </member>
+        <member name="M:TaskService.Services.ITaskService.UpdateTaskStatus(System.Collections.Generic.List{System.Guid},TaskService.Models.BaseTaskStatus)">
+            <summary>
+            Изменение статуса задачи.
+            </summary>
+            <remarks>
+            Статусы могут изменяться только в соответствии с графом в <see cref="F:TaskService.Models.TaskStatusRelations.Rels"/>.
+            </remarks>
+            <param name="taskId">Идентификатор задачи</param>
+            <param name="newStatus">Новый статус</param>
+            <returns>Установленный статус</returns>
+        </member>
+        <member name="M:TaskService.Services.ITaskService.UpdateTaskStatus(System.Collections.Generic.List{System.Guid},TaskService.Models.BaseTaskStatus,CommonLib.FQRequestInfo,System.Collections.Generic.List{TaskService.Models.BaseTask})">
+            <summary>
+            Изменение статуса задачи.
+            </summary>
+            <remarks>
+            Статусы могут изменяться только в соответствии с графом в <see cref="F:TaskService.Models.TaskStatusRelations.Rels"/>.
+            </remarks>
+            <param name="taskId">Идентификатор задачи</param>
+            <param name="newStatus">Новый статус</param>
+            <param name="currentUser">Пользователь, выполнивший смену статуса</param>
+            <returns>Установленный статус</returns>
+        </member>
+        <member name="M:TaskService.Services.ITaskService.GetTasks(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Получение задач по списку идентификаторов
+            </summary>
+            <param name="taskIdList">Список идентификаторов</param>
+            <returns>Список задач</returns>
+        </member>
+        <member name="M:TaskService.Services.ITaskService.GetTasks(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Получение задач по признакам
+            </summary>
+            <param name="searchParams">Искомые значения полей, задачи с которыми нужно вернуть</param>
+            <returns>Список задач</returns>
+        </member>
+        <member name="M:TaskService.Services.ITaskService.GetUserTasks(CommonLib.FQRequestInfo,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Получение задач по признакам
+            </summary>
+            <param name="searchParams">Искомые значения полей, задачи с которыми нужно вернуть</param>
+            <returns>Список задач</returns>
+        </member>
+        <member name="M:TaskService.Services.ITaskService.DeleteTasks(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Удаление задач по идентификаторам
+            </summary>
+            <param name="taskIdList">Список идентификаторов задач</param>
+        </member>
+        <member name="M:TaskService.Services.ITaskService.DeleteTasks(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Удаление задач по признакам.
+            </summary>
+            <param name="searchParams">Искомые значения полей, с которыми нужно удалить задачи</param>
+        </member>
+        <member name="M:TaskService.Services.ITaskService.CloseExpiredTasks">
+            <summary>
+            Поиск задач, время исполнения которых истекло, и первод в статус "AvailableUntilPassed" или "SolutionTimeOver" со списанием штрафа
+            </summary>
+        </member>
+        <member name="T:TaskService.Services.TaskService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:TaskService.Services.TaskService.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Default constructor with HTTPContext
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:TaskService.Services.TaskService.CloseExpiredTasks">
+            <summary>
+            Поиск задач, время исполнения которых истекло, и первод в статус "AvailableUntilPassed" или "SolutionTimeOver" со списанием штрафа
+            </summary>
+        </member>
+        <member name="M:TaskService.Services.TaskService.CreateTask(CommonLib.FQRequestInfo,System.String,System.String,System.Int32,System.Int32,System.DateTime,System.TimeSpan,System.Int32,System.Guid,System.Guid)">
+            <summary>
+            Создание задачи с указанными параметрами
+            </summary>
+            <param name="name">Имя</param>
+            <param name="description">Описание</param>
+            <param name="cost">Стоимость</param>
+            <param name="penalty">Штраф</param>
+            <param name="availableUntil">Время актуальности задачи</param>
+            <param name="solutionTime">Время решения задачи</param>
+            <param name="speedBonus">Награда за преждевременное выполнение</param>
+            <param name="creator">Создатель</param>
+            <param name="executor">Получатель</param>
+            <returns>Объект задачи</returns>
+        </member>
+        <member name="M:TaskService.Services.TaskService.CreateTask(CommonLib.FQRequestInfo,TaskService.Models.BaseTask)">
+            <summary>
+            Создание задачи из "референс"-объекта
+            </summary>
+            <param name="newTask">"Референс"-обьект</param>
+            <returns>Измененный объект задачи</returns>
+        </member>
+        <member name="M:TaskService.Services.TaskService.DeleteTasks(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Удаление задач по идентификаторам
+            </summary>
+            <param name="taskIdList">Список идентификаторов задач</param>
+        </member>
+        <member name="M:TaskService.Services.TaskService.DeleteTasks(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Удаление задач по признакам.
+            </summary>
+            <param name="searchParams">Искомые значения полей, с которыми нужно удалить задачи</param>
+        </member>
+        <member name="M:TaskService.Services.TaskService.GetTasks(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Получение задач по списку идентификаторов
+            </summary>
+            <param name="taskIdList">Список идентификаторов</param>
+            <returns>Список задач</returns>
+        </member>
+        <member name="M:TaskService.Services.TaskService.GetTasks(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Получение задач по признакам
+            </summary>
+            <param name="searchParams">Искомые значения полей, задачи с которыми нужно вернуть</param>
+            <returns>Список задач</returns>        
+        </member>
+        <member name="M:TaskService.Services.TaskService.GetUserTasks(CommonLib.FQRequestInfo,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Получение задач по признакам (с ограничениям польователей)
+            </summary>
+            <param name="searchParams">Искомые значения полей, задачи с которыми нужно вернуть</param>
+            <returns>Список задач</returns>        
+        </member>
+        <member name="M:TaskService.Services.TaskService.UpdateTask(System.Guid,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Обновление информации о задаче.
+            </summary>
+            <remarks>
+            Поля <see cref="F:TaskService.Models.BaseTask.Id"/> и <see cref="F:TaskService.Models.BaseTask.Creator"/> не изменяются.
+            Поле <see cref="F:TaskService.Models.BaseTask.Status"/> обновляется через функцию <see cref="!:UpdateTaskStatus(List&lt;Guid&gt;, BaseTaskStatus, FQRequestInfo)"/>.
+            Поля <see cref="F:TaskService.Models.BaseTask.CreationDate"/>, <see cref="F:TaskService.Models.BaseTask.CompletionDate"/> не изменяются напрямую.
+            Поле <see cref="F:TaskService.Models.BaseTask.ModificationTime"/> изменяется автоматически.
+            </remarks>
+            <param name="taskId">Идентификатор обновляемой задачи</param>
+            <param name="newParams">Набор новых значений полей задачи</param>        
+            <returns>Идентификатор измененной задачи</returns>
+        </member>
+        <member name="M:TaskService.Services.TaskService.UpdateTaskStatus(System.Collections.Generic.List{System.Guid},TaskService.Models.BaseTaskStatus)">
+            <summary>
+            Изменение статуса задачи.
+            </summary>
+            <remarks>
+            Статусы могут изменяться только в соответствии с графом в <see cref="F:TaskService.Models.TaskStatusRelations.Rels"/>.
+            </remarks>
+            <param name="taskIds">Идентификатор задачи</param>
+            <param name="newStatus">Новый статус</param>
+            <returns>Установленный статус</returns>
+            TODO: рудимент? не добавлял сюда формирование хистори эвентов; не используется 
+        </member>
+        <member name="M:TaskService.Services.TaskService.UpdateTaskStatus(System.Collections.Generic.List{System.Guid},TaskService.Models.BaseTaskStatus,CommonLib.FQRequestInfo,System.Collections.Generic.List{TaskService.Models.BaseTask})">
+            <summary>
+            Изменение статуса задачи.
+            </summary>
+            <remarks>
+            Статусы могут изменяться только в соответствии с графом в <see cref="F:TaskService.Models.TaskStatusRelations.Rels"/>.
+            </remarks>
+            <param name="taskIds">Идентификатор задачи</param>
+            <param name="newStatus">Новый статус</param>
+            <param name="ri">Данные запроса</param>
+            <returns>Установленный статус</returns>
+        </member>
+        <member name="T:TaskService.Startup">
+            <summary>
+            Base class
+            </summary>
+        </member>
+        <member name="M:TaskService.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Startup.
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:TaskService.Startup.Configuration">
+            <summary>
+            Get configuration
+            </summary>
+        </member>
+        <member name="M:TaskService.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:TaskService.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+    </members>
+</doc>

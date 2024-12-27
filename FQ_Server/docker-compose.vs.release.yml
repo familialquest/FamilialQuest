@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+### external services
+  db:
+    container_name: pgsql-fqdb-release
+    volumes:
+      - ./FQ.DB/Release:/docker-entrypoint-initdb.d

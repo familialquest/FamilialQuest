@@ -1,0 +1,32 @@
+{
+  "Elements": {
+    "Viewport": {
+      "Components": {
+        "Image": {
+          "ConfigurationValues": {
+            "Sprite": {
+              "type": "FilePath",
+              "value": "viewport_bg.png"
+            }
+          }
+        }
+      }
+    },
+    "Button_GetTasks_Text": {
+      "Components": {
+        "TextMeshProUGUI": {
+          "ConfigurationValues": {
+            "Text": {
+              "type": "Text",
+              "value": "Получить задачи"
+            },
+            "Color": {
+              "type": "Text",
+              "value": "RGBA(255,0,0,0)"
+            }
+          }
+        }
+      }
+    }
+  }
+}

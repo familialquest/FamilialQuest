@@ -1,0 +1,13 @@
+fqdb-restore:
+    image: crunchydata/crunchy-backrest-restore:centos7-12.3-4.4.0
+    environment:
+      PGBACKREST_STANZA: "fqdb-encrypted"
+      PGBACKREST_PG1_PATH: "/pgdata/fqdb"
+      PGBACKREST_REPO1_PATH: "/backrestrepo/fqdb-backups-encrypted"
+      PGBACKREST_REPO1_CIPHER_PASS: "[TODO]"
+      PGBACKREST_REPO1_CIPHER_TYPE: "aes-256-cbc"
+    volumes:
+      - FQDB.Data2:/pgdata
+      - FQDB.BackRestRepo:/backrestrepo
+    container_name: cpgsql-restore
+    hostname: fqdb-restore

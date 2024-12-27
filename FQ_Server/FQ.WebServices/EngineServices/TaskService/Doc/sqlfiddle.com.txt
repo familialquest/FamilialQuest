@@ -1,0 +1,24 @@
+﻿CREATE TABLE Tasks (
+ ID uuid NOT NULL UNIQUE,
+ Type INT NOT NULL,
+ Name TEXT NOT NULL,
+ Description TEXT,
+ Cost INT NOT NULL,
+ Penalty INT,
+ AvailableUntil INTERVAL NOT NULL,
+ SolutionTime INTERVAL,
+ SpeedBonus INT,
+ Creator uuid NOT NULL,
+ Receiver uuid NOT NULL,
+ Status INT NOT NULL,
+ CreationDate TIMESTAMP,
+ CompletionDate TIMESTAMP,
+ ModifyTime TIMESTAMP
+);
+
+INSERT INTO Tasks (id, Type, Name, Description, Cost, Penalty, AvailableUntil, SolutionTime, SpeedBonus, Creator, Receiver, Status, CreationDate, CompletionDate, ModifyTime) 
+VALUES('{2A91E4A3-7BAC-4EBB-B45E-207C838D9A81}', 0, 'Task1', 'Task1 Description', 10, 2, '3 12:00:00', '1', 5, '{A371BD08-806C-4603-8BAE-3829F23C8218}', '{A874174D-C81B-4116-8999-93C0E0A3C60E}', 0, '2019-10-29 04:05:06', 'epoch', '2019-10-29 04:05:06');
+INSERT INTO Tasks (id, Type, Name, Description, Cost, Penalty, AvailableUntil, SolutionTime, SpeedBonus, Creator, Receiver, Status, CreationDate, CompletionDate, ModifyTime) 
+VALUES('{2B939D66-D359-4484-A39B-B25C78D573B1}', 0, 'Task2', 'Task2 Description', 20, 4, '4:00:00', '2:00:00', 5, '{C328180B-B5DE-4637-BF09-C0EF2932AB9C}', '{4B00524F-EA09-48BD-80B9-9CAD4366D45F}', 0, '2019-10-29 06:05:06', 'epoch', '2019-10-29 06:05:06');
+INSERT INTO Tasks (id, Type, Name, Description, Cost, Penalty, AvailableUntil, SolutionTime, SpeedBonus, Creator, Receiver, Status, CreationDate, CompletionDate, ModifyTime) 
+VALUES('{D1C8048F-1F88-46BD-A92F-80221D9B8490}', 0, 'Task3', 'Task2 Description', 30, 5, '1', '2', 11, '{C328180B-B5DE-4637-BF09-C0EF2932AB9C}', '{CEAC2887-243B-4434-B7AE-EF37DDC2816C}', 0, '2019-10-28 04:05:06', '2019-10-29 04:05:06', '2019-10-29 08:05:06');

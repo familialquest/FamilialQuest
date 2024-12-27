@@ -1,0 +1,50 @@
+ # Create net:
+ # - ELK-net
+ # Create volumes:
+ #  - ES.Data
+ #  - ES.Config
+ #  - Kibana.Config
+ #  - Filebeat.Config
+ # Load all files from elastic dir to volumes ES.Config
+ # Load all files from kibana dir to volumes Kibana.Config
+ # Load all files from filebeat dir to volumes Filebeat.Config
+ # Actualize elastic URL in kibana.yml
+ # 
+  es-service:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+    restart: always
+    environment:
+      - node.name=elastic
+      - discovery.type=single-node
+    volumes:
+      - ES.Data:/usr/share/elasticsearch/data
+      - ES.Config:/usr/share/elasticsearch/config
+    ports:
+      - 9200:9200
+      - 9300:9300
+    net: FQ-net
+    container_name: elastic
+
+  kibana-service:
+    restart: always
+    image: docker.elastic.co/kibana/kibana:7.9.3
+    ports:
+      - 5601:5601
+    net: FQ-net
+    volumes:
+      - Kibana.Config:/usr/share/kibana/config
+    container_name: kibana        
+
+  filebeat-service:
+    image: docker.elastic.co/beats/filebeat:7.9.3
+    restart: always
+    environment:
+      - setup.kibana.host=https://kibana:5601
+      - output.elasticsearch.hosts=https://elastic:9200
+    net: FQ-net
+    user: root
+    volumes:
+      - Filebeat.Config:/usr/share/filebeat/
+      - /var/lib/docker/containers:/var/lib/docker/containers
+      - /var/run/docker.sock:/var/run/docker.sock
+    container_name: filebeat     

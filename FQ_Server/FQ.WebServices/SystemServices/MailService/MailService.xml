@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MailService</name>
+    </assembly>
+    <members>
+        <member name="T:MailService.Models.MailWorker">
+            <summary>
+            Класс определяющий работу с отправкой сообщений электронной почты
+            </summary>
+        </member>
+        <member name="M:MailService.Models.MessageTemplates.loadData">
+            <summary>
+            Считывание списка шаблонов сообщений из сопутствующего routes.json
+            </summary>
+        </member>
+        <member name="M:MailService.Models.MessageTemplates.CheckChanges">
+            <summary>
+            Таск периодически проверяет триггер readagain.1
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:MailService.Services.MailServices">
+            <summary>
+            Сервис управления проектами
+            </summary>
+        </member>
+        <member name="M:MailService.Services.MailServices.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Default constructor with HTTPContext
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+    </members>
+</doc>

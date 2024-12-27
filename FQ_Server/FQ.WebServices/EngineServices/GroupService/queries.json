@@ -1,0 +1,11 @@
+{
+  "CreateGroup": "INSERT INTO Groups (ID, Name, Img) VALUES (@ID, @Name, @Img);",
+  "UpdateGroup": "UPDATE Groups SET Name = @Name, Img = @Img WHERE ID = @ID;",
+  "RemoveGroup": "DELETE FROM Groups WHERE ID = @ID;",
+  "GetGroup": "SELECT ID, Name, Img FROM Groups WHERE ID = @ID;",
+  "SaveSubscription": "INSERT INTO Subscriptions (PurchaseToken, GroupID, OrderID, Months, InnerState, VoidedSource, VoidedReason, ModificationTime) VALUES (@PurchaseToken, @GroupID, @OrderID, @Months, @InnerState, @VoidedSource, @VoidedReason, @ModificationTime);",
+  "GetAllActualSubscriptions": "SELECT PurchaseToken, Months, GroupID, InnerState, ModificationTime FROM Subscriptions WHERE InnerState = @InnerStatePurchased OR InnerState = @InnerStateAcivated;",
+  "GetActualSubscriptionsForGroup": "SELECT PurchaseToken, Months, GroupID, InnerState, ModificationTime FROM Subscriptions WHERE ((InnerState = @InnerStatePurchased OR InnerState = @InnerStateAcivated) AND (GroupID = @GroupID));",
+  "GetThisSubscriptionCountForGroup": "SELECT COUNT(*) FROM Subscriptions WHERE GroupID = @GroupID AND PurchaseToken=@PurchaseToken;",
+  "UpdateSubscriptionState": "UPDATE Subscriptions SET InnerState = @InnerState, ModificationTime = @ModificationTime  WHERE PurchaseToken = @PurchaseToken;"
+}

@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RegistrationService</name>
+    </assembly>
+    <members>
+        <member name="M:RegistrationService.Controllers.Controller.CreateTempAccountController(CommonLib.FQRequestInfo)">
+            <summary>
+            Запрос на регистрацию аккаунта через почту.
+            </summary>
+            <param name="ri">FQRequestInfo</param>
+            <returns>StatusCode + (успешном выполнении)FQResponseInfo или сообщение об ошибке</returns>
+        </member>
+        <member name="M:RegistrationService.Controllers.Controller.ResetPasswordController(CommonLib.FQRequestInfo)">
+            <summary>
+            Запрос на восстановление пароля через почту.
+            </summary>
+            <param name="ri">FQRequestInfo</param>
+            <returns>StatusCode + (успешном выполнении)FQResponseInfo или сообщение об ошибке</returns>
+        </member>
+        <member name="M:RegistrationService.Controllers.Controller.ConfirmTempAccountController(CommonLib.FQRequestInfo)">
+            <summary>
+            Подтверждение запроса на регистрацию аккаунта через почту.
+            </summary>
+            <param name="ri">FQRequestInfo</param>
+            <returns>StatusCode + (успешном выполнении)FQResponseInfo или сообщение об ошибке</returns>
+        </member>
+        <member name="M:RegistrationService.Controllers.Controller.ConfirmResetPasswordController(CommonLib.FQRequestInfo)">
+            <summary>
+            Подтверждение запроса на восстановление пароля через почту.
+            </summary>
+            <param name="ri">FQRequestInfo</param>
+            <returns>StatusCode + (успешном выполнении)FQResponseInfo или сообщение об ошибке</returns>
+        </member>
+        <member name="T:RegistrationService.Models.MailWorker">
+            <summary>
+            Класс определяющий работу с отправкой сообщений электронной почты
+            </summary>
+        </member>
+        <member name="M:RegistrationService.Models.MailWorker.SendCreateAccountConfirmCode(CommonLib.UserCredentials,System.String)">
+            <summary>
+            Формирование и отправка на email клиента сообщения
+            с кодом подтверждения регистрации аккаунта.
+            </summary>
+            <param name="uc">UserCredentials с указанными Login и PasswordHash</param>
+        </member>
+        <member name="M:RegistrationService.Models.MailWorker.SendResetPasswordConfirmCode(CommonLib.UserCredentials,System.String)">
+            <summary>
+            Формирование и отправка на email клиента сообщения
+            с кодом подтверждения сброса пароля.
+            </summary>
+            <param name="uc">UserCredentials с указанными Login и PasswordHash</param>
+        </member>
+        <member name="M:RegistrationService.Models.MailWorker.SendMail(CommonLib.UserCredentials,System.String,System.String)">
+            <summary>
+            Формирование и отправка электронного сообщения
+            </summary>
+            <param name="acc">UserCredentials с указанными Login и PasswordHash</param>
+            <param name="body">Текст сообщения</param>
+        </member>
+        <member name="T:RegistrationService.Services.IRegistrationServices">
+            <summary>
+            Интерфейс сервиса регистрации
+            </summary>
+        </member>
+        <member name="M:RegistrationService.Services.IRegistrationServices.CreateTempAccount(CommonLib.FQRequestInfo)">
+            <summary>
+            Создание временной учетной записи при запросе на регистрацию.
+            </summary>
+            <param name="ri">FQRequestInfo с указанными Login и PasswordHash</param>
+        </member>
+        <member name="M:RegistrationService.Services.IRegistrationServices.ResetPassword(CommonLib.FQRequestInfo)">
+            <summary>
+            Создание временной учетной записи при запросе на сброс пароля.
+            </summary>
+            <param name="ri">FQRequestInfo с указанными Login и PasswordHash</param>
+        </member>
+        <member name="M:RegistrationService.Services.IRegistrationServices.ConfirmTempAccount(CommonLib.FQRequestInfo)">
+            <summary>
+            Подтверждение операции регистрации.
+            </summary>
+            <param name="ri">FQRequestInfo с указанными Login и ConfirmCode</param>
+        </member>
+        <member name="M:RegistrationService.Services.IRegistrationServices.ConfirmResetPassword(CommonLib.FQRequestInfo)">
+            <summary>
+            Подтверждение операции сброса пароля.
+            </summary>
+            <param name="ri">FQRequestInfo с указанными Login и ConfirmCode</param>
+        </member>
+        <member name="T:RegistrationService.Services.RegistrationServices">
+            <summary>
+            Сервис управления проектами
+            </summary>
+        </member>
+        <member name="M:RegistrationService.Services.RegistrationServices.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Default constructor with HTTPContext
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:RegistrationService.Services.RegistrationServices.CreateTempAccount(CommonLib.FQRequestInfo)">
+            <summary>
+            Создание временной учетной записи при запросе на регистрацию.
+            </summary>
+            <param name="ri">FQRequestInfo с указанными Login и PasswordHash</param>
+        </member>
+        <member name="M:RegistrationService.Services.RegistrationServices.ResetPassword(CommonLib.FQRequestInfo)">
+            <summary>
+            Создание временной учетной записи при запросе на сброс пароля.
+            </summary>
+            <param name="ri">FQRequestInfo с указанными Login и PasswordHash</param>
+        </member>
+        <member name="M:RegistrationService.Services.RegistrationServices.ConfirmTempAccount(CommonLib.FQRequestInfo)">
+            <summary>
+            Подтверждение операции регистрации.
+            </summary>
+            <param name="ri">FQRequestInfo с указанными Login и ConfirmCode</param>
+        </member>
+        <member name="M:RegistrationService.Services.RegistrationServices.ConfirmResetPassword(CommonLib.FQRequestInfo)">
+            <summary>
+            Подтверждение операции сброса пароля.
+            </summary>
+            <param name="ri">FQRequestInfo с указанными Login и ConfirmCode</param>
+        </member>
+        <member name="M:RegistrationService.Services.RegistrationServices.RoutToEngineService(CommonLib.FQRequestInfo)">
+            <summary>
+            Формирование и отправка запроса к Account сервису
+            </summary>
+            <param name="ri">FQRequestInfo</param>
+            <returns>FQResponseInfo или сообщение об ошибке</returns>
+        </member>
+        <member name="M:RegistrationService.Services.RegistrationServices.GenerateConfirmCode">
+            <summary>
+            //Генерация проверочного кода
+            </summary>
+            <returns>Проверочный код 6 цифр</returns>
+        </member>
+        <member name="M:RegistrationService.Services.RegistrationServices.VerifyLogin(System.String)">
+            <summary>
+            Проверка корректности логина клиента
+            </summary>
+            <param name="login"></param>
+        </member>
+    </members>
+</doc>

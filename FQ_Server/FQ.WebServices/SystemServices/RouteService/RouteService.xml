@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RouteService</name>
+    </assembly>
+    <members>
+        <member name="M:RouteService.Controllers.Controller.RouteController(CommonLib.FQRequestInfo)">
+            <summary>
+            Контроллер роутера клиентских запросов
+            </summary>
+            <param name="ri">Стандартный в рамках сервиса формат входных данных от клиента</param>
+            <returns>StatusCode + Content</returns>
+        </member>
+        <member name="T:RouteService.Services.IRouteServices">
+            <summary>
+            Интерфейс сервиса
+            </summary>
+        </member>
+        <member name="M:RouteService.Services.IRouteServices.Route(CommonLib.FQRequestInfo)">
+            <summary>
+            Первичная проверка корректности запроса,
+            аутентификация пользователя и дальнейший роутинг к соответствующему,
+            или роутинг неавторизированного пользователя по вопросам регистрации.
+            </summary>
+            <param name="ri"></param>
+            <returns>Результат обработки запроса</returns>
+        </member>
+        <member name="T:RouteService.Services.RouteServices">
+            <summary>
+            RouteServices реализует первичную верефикацию и маршрутизацию
+            запросов клиента
+            </summary>
+        </member>
+        <member name="M:RouteService.Services.RouteServices.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Default constructor with HTTPContext
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:RouteService.Services.RouteServices.Route(CommonLib.FQRequestInfo)">
+            <summary>
+            Первичная проверка корректности запроса,
+            аутентификация пользователя и дальнейший роутинг к соответствующему,
+            или роутинг неавторизированного пользователя по вопросам регистрации.
+            </summary>
+            <param name="ri"></param>
+            <returns>Результат обработки запроса</returns>
+        </member>
+        <member name="M:RouteService.Services.RouteServices.IsRegOrResetAction(System.String)">
+            <summary>
+            Проверка, относится ли запрос к вопросам регистрации
+            </summary>
+            <param name="actionName">Запрашиваемый пользователем Action</param>
+            <returns>Результат проверки: true/false</returns>
+        </member>
+    </members>
+</doc>

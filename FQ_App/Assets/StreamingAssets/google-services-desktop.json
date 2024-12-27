@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "[TODO]",
+    "firebase_url": "[TODO]",
+    "project_id": "[TODO]",
+    "storage_bucket": "[TODO]"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "[TODO]",
+        "android_client_info": {
+          "package_name": "com.familialquest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "[TODO]",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "[TODO]"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "[TODO]",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

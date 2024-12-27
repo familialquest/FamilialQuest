@@ -1,0 +1,32 @@
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+  
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+      hints.default_config.enabled: false
+      
+processors:
+- add_cloud_metadata: ~
+
+output.elasticsearch:
+  hosts: '${ELASTICSEARCH_HOSTS:https://elastic:9200}'
+  username: '${ELASTICSEARCH_USERNAME:elastic}'
+  password: '${ELASTICSEARCH_PASSWORD:[TODO]}'
+  ssl:
+    enabled: true
+    certificate: certs/logstash/logstash.crt
+    key: certs/logstash/logstash.key
+    certificate_authorities: certs/ca/ca.crt
+
+setup.kibana:
+  host: '${KIBANA_HOSTS:https://kibana:5601}'
+  ssl:
+    enabled: true
+    certificate: certs/logstash/logstash.crt
+    key: certs/logstash/logstash.key
+    certificate_authorities: certs/ca/ca.crt

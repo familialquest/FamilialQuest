@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RewardService</name>
+    </assembly>
+    <members>
+        <member name="T:RewardService.Models.DBWorker">
+            <summary>
+            Класс для работы с запросами к сервису БД
+            </summary>
+        </member>
+        <member name="M:RewardService.Models.DBWorker.AddReward(CommonTypes.Reward)">
+            <summary>
+            Добавление новой награды
+            </summary>
+            <param name="inputReward"></param>
+        </member>
+        <member name="M:RewardService.Models.DBWorker.UpdateReward(CommonTypes.Reward)">
+            <summary>
+            Обновление награды
+            </summary>
+            <param name="inputReward"></param>
+        </member>
+        <member name="M:RewardService.Models.DBWorker.RemoveReward(System.Guid,System.Guid)">
+            <summary>
+            Удаление награды
+            </summary>
+            <param name="groupId"></param>
+            <param name="rewardsIds"></param>
+        </member>
+        <member name="M:RewardService.Models.DBWorker.RemoveRelatedRewards(System.Guid,System.Guid)">
+            <summary>
+            Удаление награды
+            </summary>
+            <param name="groupId"></param>
+            <param name="rewardsIds"></param>
+        </member>
+        <member name="M:RewardService.Models.DBWorker.GetAllRewards(System.Guid)">
+            <summary>
+            Получение всех наград
+            </summary>
+            <param name="groupId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RewardService.Models.DBWorker.GetRewardsById(System.Guid,System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Получение указанных наград
+            </summary>
+            <param name="groupId"></param>
+            <param name="rewardsId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:RewardService.Services.IRewardServices">
+            <summary>
+            Интерфейс сервиса
+            </summary>
+        </member>
+        <member name="T:RewardService.Services.RewardServices">
+            <summary>
+            Сервис управления группами
+            </summary>
+        </member>
+        <member name="M:RewardService.Services.RewardServices.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Default constructor with HTTPContext
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:RewardService.Services.RewardServices.GetRewardFromPostData(System.Object)">
+            <summary>
+            Дессериализация Reward
+            </summary>
+            <param name="inputParams"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RewardService.Services.RewardServices.AddReward(CommonLib.FQRequestInfo,CommonTypes.Reward,System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Создание новой награды
+            </summary>
+            <param name="ri"></param>
+            <param name="inputReward"></param>
+            <param name="availableFor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RewardService.Services.RewardServices.PurchaseReward(CommonLib.FQRequestInfo)">
+            <summary>
+            Приобретение награды
+            </summary>
+            <param name="ri"></param>
+        </member>
+        <member name="M:RewardService.Services.RewardServices.GiveReward(CommonLib.FQRequestInfo)">
+            <summary>
+            Подтверждение вручения награды
+            </summary>
+            <param name="ri"></param>
+        </member>
+        <member name="M:RewardService.Services.RewardServices.RemoveReward(CommonLib.FQRequestInfo,CommonTypes.Reward)">
+            <summary>
+            Удаление награды
+            </summary>
+            <param name="ri"></param>
+            <param name="inputReward"></param>
+        </member>
+        <member name="M:RewardService.Services.RewardServices.RemoveRelatedRewards(CommonLib.FQRequestInfo)">
+            <summary>
+            Удаление связанных с пользователем наград
+            </summary>
+            <param name="ri"></param>
+        </member>
+        <member name="M:RewardService.Services.RewardServices.GetRewardsById(CommonLib.FQRequestInfo,System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Получение списка наград по идентификаторам
+            </summary>
+            <param name="ri"></param>
+            <param name="requestedRewards"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

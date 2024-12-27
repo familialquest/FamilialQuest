@@ -1,0 +1,5 @@
+{
+  "CreateHistoryEvent": "INSERT INTO HistoryEvents (ID, GroupID, CreationDate, ItemType, MessageType, Visability, AvailableFor, TargetItem, Doer) VALUES (@ID, @GroupID, @CreationDate, @ItemType, @MessageType, @Visability, @AvailableFor, @TargetItem, @Doer);",
+  "GetHistoryEvents_Parent": "SELECT Id, GroupId, CreationDate, ItemType, MessageType, Visability, AvailableFor, TargetItem, Doer FROM HistoryEvents WHERE GroupID = @GroupID",
+  "GetHistoryEvents_Children": "SELECT Id, GroupId, CreationDate, ItemType, MessageType, Visability, AvailableFor, TargetItem, Doer FROM HistoryEvents WHERE GroupID = @GroupID AND (Visability = @VisabilityGroup OR (Visability = @VisabilityChildren AND (AvailableFor @> ARRAY[@AvailableFor]::uuid[])))"
+}

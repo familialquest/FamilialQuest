@@ -1,0 +1,36 @@
+ # Create volumes:
+# - FQDB.Replica.Data
+# - FQDB.Replica.Conf
+# - FQDB.Replica.WAL
+# - FQDB.Replica.Recover
+# Copy to FQDB.Replica.Conf
+# - pg_hba.conf
+# - postgresql.conf
+ 
+  fqdb-syncreplica:
+    image: crunchydata/crunchy-postgres:centos7-12.3-4.3.2
+    restart: always
+    volumes:
+      - FQDB.Replica.Data:/pgdata
+      - FQDB.Replica.Conf:/pgconf
+      - FQDB.Replica.WAL:/pgwal
+      - FQDB.Replica.Recover:/recover
+    environment:
+      TEMP_BUFFERS: "9MB"
+      PGHOST: "/tmp"
+      MAX_WAL_SENDERS: "5"
+      PG_MODE: "replica"
+      PG_PRIMARY_USER: "primaryuser"
+      PG_PRIMARY_PASSWORD: "[TODO]"
+      PG_PRIMARY_HOST: "[TODO]"
+      PG_PRIMARY_PORT: "12007"
+      SYNC_REPLICA: "fqdb-replica"
+      PG_USER: "fqdbuser"
+      PG_ROOT_PASSWORD: "[TODO]"
+      PG_PASSWORD: "[TODO]"
+      PG_DATABASE: "FQDB"
+    ports:
+      - "12011:5432"
+    container_name: fqdb-replica
+    hostname: fqdb-replica
+    net: FQ-net

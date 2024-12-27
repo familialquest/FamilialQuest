@@ -1,0 +1,8 @@
+{
+  "Group": "http://group",
+  "Reward": "http://reward",
+  "Event": "http://event",
+  "Task": "http://task",
+  "Mail": "http://mail",
+  "Notification": "http://notification"
+}

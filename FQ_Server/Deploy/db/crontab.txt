@@ -1,0 +1,3 @@
+0 */2 * * * docker exec -d fqdb pgbackrest --stanza=fqdb --type=incr backup
+0 4 * * * docker exec -d fqdb pgbackrest --stanza=fqdb --type=diff backup
+0 3 */7 * * docker exec -d fqdb pgbackrest --stanza=fqdb --type=full backup

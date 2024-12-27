@@ -1,0 +1,270 @@
+# Create network:
+# - FQ-net
+# Create volumes:
+# - Nginx.etc
+# - Nginx.html
+# - acme.out
+# - FQDB.Data
+# - FQDB.BackRestRepo
+# - FQDB.Conf
+# - FQDB.WAL
+# - FQDB.Recover
+# - FQDB.sshd
+# - postfix.spool
+# - postfix.log
+# - postfix.dkim
+# - postfix.mail
+# Define ENVVAR:
+# "FQDB_COMMONPART=Server=fqdb;Port=5432;Database=fqdb;Pooling=true;MinPoolSize=1;MaxPoolSize=20;"
+# "FQELK_COMMON_INDEX_PREFIX=<prod>/<test>/<...>"
+# "FQELK_COMMONURI=<http://elastic:9200>"
+# "FQELK_COMMONUSERNAME=<nlog_user>"
+# "FQELK_COMMONPASSWORD=<nlog_user password>"
+# Load init.sql in FQDB.Conf volume
+# Load Nginx config-files to volume Nginx.etc
+# Load Nginx cert-files to volume Nginx.etc/ssl/familialquest.com from volume acme.out/familialquest.com
+# Load html-files (if needed) to volume Nginx.html
+# Load acme crypt-files to volume acme.out
+# Load postfix crypt-files to volume postfix.dkim
+# Copy to volume FQDB.Conf
+# - pg_hba.conf
+# - postgresql.conf
+# - server.crt
+# - server.key
+# - ca.crt
+# Ensure about: https://stackoverflow.com/questions/30383845/what-is-the-best-practice-of-docker-ufw-under-ubuntu
+# Set to the docker-host machine crontab.txt: "crontab crontab.txt"
+# Follow the instructions in drivehq.txt
+# After fqdb started run init.sql through PGAdmin or psql (locally)
+
+### external services
+  fqdb:
+    image: crunchydata/crunchy-postgres:centos7-12.3-4.4.0
+    restart: always
+    ports:
+      - "12007:5432"
+    environment:
+      PG_MODE: "primary"
+      PG_PRIMARY_USER: "primaryuser"
+      PG_PRIMARY_PASSWORD: "[TODO]"
+      PG_PRIMARY_PORT: "5432"
+      PG_USER: "fqdbuser"
+      PG_ROOT_PASSWORD: "[TODO]"
+      PG_PASSWORD: "[TODO]"
+      PG_DATABASE: "fqdb"
+      PGBACKREST: "true"
+      PGBACKREST_STANZA: "fqdb-encrypted"
+      PGBACKREST_PG1_PATH: "/pgdata/fqdb"
+      PGBACKREST_REPO1_PATH: "/backrestrepo/fqdb-backups-encrypted"
+      PGBACKREST_LOG_PATH: "/tmp"
+      PGBACKREST_RETENTION_FULL: "2"
+      PGBACKREST_RETENTION_DIFF: "2"
+      PGBACKREST_REPO1_CIPHER_PASS: "[TODO]"
+      PGBACKREST_REPO1_CIPHER_TYPE: "aes-256-cbc"
+    volumes:
+      - FQDB.Data:/pgdata
+      - FQDB.BackRestRepo:/backrestrepo
+      - FQDB.Conf:/pgconf
+      - FQDB.WAL:/pgwal
+      - FQDB.Recover:/recover
+      - FQDB.sshd:/sshd
+    container_name: fqdb
+    hostname: fqdb
+    net: "FQ-net"  
+    
+  nginx:
+    image: nginx:1.18.0-alpine
+    restart: always
+    ports:
+      - "80:80"  
+      - "443:443" 
+    volumes:
+      - Nginx.etc:/etc/nginx
+      - Nginx.html:/usr/share/nginx/html
+    labels:
+      - sh.acme.autoload.domain=familialquest.com
+      - co.elastic.logs/enabled=true
+      - co.elastic.logs/module=nginx 
+      - co.elastic.logs/fileset.stdout=access 
+      - co.elastic.logs/fileset.stderr=error 
+    container_name: nginx
+    net: "FQ-net" 
+    
+  acme.sh:
+    image: neilpang/acme.sh
+    restart: always
+    container_name: acme.sh    
+    command: daemon
+    volumes:
+      - acme.out:/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock 
+    environment:
+      - DEPLOY_DOCKER_CONTAINER_LABEL=sh.acme.autoload.domain=familialquest.com
+      - DEPLOY_DOCKER_CONTAINER_KEY_FILE=/etc/nginx/ssl/familialquest.com/key.pem
+      - DEPLOY_DOCKER_CONTAINER_CERT_FILE="/etc/nginx/ssl/familialquest.com/cert.pem"
+      - DEPLOY_DOCKER_CONTAINER_CA_FILE="/etc/nginx/ssl/familialquest.com/ca.pem"
+      - DEPLOY_DOCKER_CONTAINER_FULLCHAIN_FILE="/etc/nginx/ssl/familialquest.com/full.pem"
+      - DEPLOY_DOCKER_CONTAINER_RELOAD_CMD="service nginx force-reload"
+    net: "FQ-net" 
+    
+  postfix:
+    image: marvambass/versatile-postfix
+    restart: always
+    ports:
+      - "25:25"
+    environment:
+      POSTFIX_RAW_CONFIG_SMTPD_USE_TLS: "no"
+      POSTFIX_RAW_CONFIG_MAILBOX_SIZE_LIMIT: "100000000"
+      POSTFIX_RAW_CONFIG_MESSAGE_SIZE_LIMIT: "1000000"
+    command: "mail.familialquest.com no-reply:[TODO] testuser:[TODO]"
+    volumes:
+      - postfix.spool:/var/spool/postfix
+      - postfix.log:/var/log/postfix
+      - postfix.dkim:/etc/postfix/dkim
+      - postfix.mail:/var/mail
+    container_name: postfix
+    hostname: postfix
+    net: "FQ-net"  
+           
+### SystemServices      
+  routeservice:
+    image: routeservice:latest
+    restart: always
+    container_name: route
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80      
+      - FQELK_URI=${FQELK_COMMONURI}      
+      - FQELK_USERNAME=${FQELK_COMMONUSERNAME}
+      - FQELK_PASSWORD=${FQELK_COMMONPASSWORD}     
+      - FQELK_INDEX_PREFIX=${FQELK_COMMON_INDEX_PREFIX}
+      - FQ_ROUTE_MINIMAL_CLIENT_VERSION=2
+    net: "FQ-net"      
+    
+  mailservice:
+    image: mailservice:latest
+    restart: always
+    container_name: mail
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - FQDB_CONNECTION_STRING=${FQDB_COMMONPART}Username=mailserviceuser;Password=[TODO];
+      - FQELK_URI=${FQELK_COMMONURI}
+      - FQELK_USERNAME=${FQELK_COMMONUSERNAME}
+      - FQELK_PASSWORD=${FQELK_COMMONPASSWORD}
+      - FQELK_INDEX_PREFIX=${FQELK_COMMON_INDEX_PREFIX}
+      - FQ_MAIL_OUTGOING_MAILBOX=no-reply@familialquest.com
+      - FQ_MAIL_OUTGOING_MAILBOX_PASSWORD=[TODO]
+      - FQ_MAIL_OUTGOING_MAILBOX_DISPLAYNAME=no-reply@familialquest.com
+      - FQ_MAIL_SMTP_SERVER_ADDRESS=postfix
+      - FQ_MAIL_SMTP_SERVER_PORT=25
+      - FQ_MAIL_SMTP_SERVER_TIMEOUT=30
+      - FQ_MAIL_SMTP_SERVER_SSL=false
+    net: "FQ-net"   
+  
+  eventservice:
+    image: eventservice:latest
+    restart: always
+    container_name: event
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - FQDB_CONNECTION_STRING=${FQDB_COMMONPART}Username=historyeventserviceuser;Password=[TODO];
+      - FQELK_URI=${FQELK_COMMONURI}
+      - FQELK_USERNAME=${FQELK_COMMONUSERNAME}
+      - FQELK_PASSWORD=${FQELK_COMMONPASSWORD}
+      - FQELK_INDEX_PREFIX=${FQELK_COMMON_INDEX_PREFIX}
+    net: "FQ-net" 
+
+  notificationservice:
+    image: notificationservice:latest
+    container_name: notification
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - FQDB_CONNECTION_STRING=${FQDB_COMMONPART}Username=notificationserviceuser;Password=[TODO];
+      - FQELK_URI=${FQELK_COMMONURI}
+      - FQELK_USERNAME=${FQELK_COMMONUSERNAME}
+      - FQELK_PASSWORD=${FQELK_COMMONPASSWORD}
+      - FQELK_INDEX_PREFIX=${FQELK_COMMON_INDEX_PREFIX}
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/familialquestapp-firebase-adminsdk-ptnd6-9631ba9b23.json
+    net: "FQ-net" 
+
+### EngineServices    
+
+  accountservice:
+    image: accountservice:latest
+    restart: always
+    container_name: account
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - FQDB_CONNECTION_STRING=${FQDB_COMMONPART}Username=accountserviceuser;Password=[TODO];
+      - FQELK_URI=${FQELK_COMMONURI}
+      - FQELK_USERNAME=${FQELK_COMMONUSERNAME}
+      - FQELK_PASSWORD=${FQELK_COMMONPASSWORD}
+      - FQELK_INDEX_PREFIX=${FQELK_COMMON_INDEX_PREFIX}
+      - FQ_ACCOUNT_TOKEN_TTL=432000
+      - FQ_ACCOUNT_TEMP_ACCOUNT_TTL=300
+      - FQ_ACCOUNT_RESET_ALL_FAILED_LOGIN_TRYINGS_PERIOD=30
+      - FQ_ACCOUNT_MAX_PARENTS_EXTENSION=2
+      - FQ_ACCOUNT_MAX_PARENTS_NOT_EXTENSION=1
+      - FQ_ACCOUNT_MAX_CHILDRENS_EXTENSION=4
+      - FQ_ACCOUNT_MAX_CHILDRENS_NOT_EXTENSION=1
+    net: "FQ-net"    
+
+  groupservice:
+    image: groupservice:latest
+    restart: always
+    container_name: group
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - FQDB_CONNECTION_STRING=${FQDB_COMMONPART}Username=groupserviceuser;Password=[TODO];
+      - FQELK_URI=${FQELK_COMMONURI}
+      - FQELK_USERNAME=${FQELK_COMMONUSERNAME}
+      - FQELK_PASSWORD=${FQELK_COMMONPASSWORD}
+      - FQELK_INDEX_PREFIX=${FQELK_COMMON_INDEX_PREFIX}
+      - FQ_GROUP_KEY_FILE_PATH=/app/familialquestapp-2330f5e56889.json
+      - FQ_GROUP_MANAGE_SUBSCRIPTIONS_DELAY=40
+      - FQ_GROUP_APPLICATION_NAME=familialquestapp
+      - FQ_GROUP_PACKAGE_NAME=com.familialquest
+      - FQ_GROUP_SUBSCRIPTION_PRODUCTID_1M=familialquest.pa.1
+      - FQ_GROUP_SUBSCRIPTION_PRODUCTID_3M=familialquest.pa.3
+      - FQ_GROUP_SUBSCRIPTION_PRODUCTID_12M=familialquest.pa.12
+    net: "FQ-net"    
+
+  rewardservice:
+    image: rewardservice:latest
+    restart: always
+    container_name: reward
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - FQDB_CONNECTION_STRING=${FQDB_COMMONPART}Username=rewardserviceuser;Password=[TODO];
+      - FQELK_URI=${FQELK_COMMONURI}
+      - FQELK_USERNAME=${FQELK_COMMONUSERNAME}
+      - FQELK_PASSWORD=${FQELK_COMMONPASSWORD}
+      - FQELK_INDEX_PREFIX=${FQELK_COMMON_INDEX_PREFIX}
+      - FQ_REWARD_MAX_REWARDS_TOTAL=10000
+      - FQ_REWARD_MAX_REWARDS_EXTENSION=1000
+      - FQ_REWARD_MAX_REWARDS_NOT_EXTENSION=1
+    net: "FQ-net"     
+    
+  taskservice:
+    image: taskservice:latest
+    restart: always
+    container_name: task
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - FQDB_CONNECTION_STRING=${FQDB_COMMONPART}Username=taskserviceuser;Password=[TODO];
+      - FQELK_URI=${FQELK_COMMONURI}
+      - FQELK_USERNAME=${FQELK_COMMONUSERNAME}
+      - FQELK_PASSWORD=${FQELK_COMMONPASSWORD}
+      - FQELK_INDEX_PREFIX=${FQELK_COMMON_INDEX_PREFIX}
+      - FQ_TASK_PERIODIC_CLOSE_DELAY=60
+      - FQ_TASK_MAX_TASKS_TOTAL=10000
+      - FQ_TASK_MAX_TASKS_EXTENSION=1000
+      - FQ_TASK_MAX_TASKS_NOT_EXTENSION=1
+    net: "FQ-net"

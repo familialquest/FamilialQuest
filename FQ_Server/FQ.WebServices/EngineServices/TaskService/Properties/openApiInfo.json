@@ -1,0 +1,15 @@
+{
+  "title": "Base Api",
+  "description": "Base Api Description.",
+  "termsOfService": "http://familyquest.com/terms/",
+  "contact": {
+    "name": "API Support",
+    "url": "http://www.familyquest.com/support",
+    "email": "support@familyquest.com"
+  },
+  "license": {
+    "name": "Private License",
+    "url": "https://familyquest.com/license"
+  },
+  "version": "0.0.1"
+}

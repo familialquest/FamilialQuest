@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NotificationService</name>
+    </assembly>
+    <members>
+        <member name="T:NotificationService.Services.NotificationServices">
+            <summary>
+            Реализация интерфейса сервиса-приёмника запросов клиента
+            </summary>
+        </member>
+        <member name="M:NotificationService.Services.NotificationServices.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Default constructor with HTTPContext
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+    </members>
+</doc>

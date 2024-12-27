@@ -1,0 +1,7 @@
+{
+  "GetTasks": "Task",
+  "GetRewardsById": "Reward",
+  "GetUsersById": "Account",
+  "NotifyUsers": "Notification",
+  "GetAllUsers": "Account"
+}

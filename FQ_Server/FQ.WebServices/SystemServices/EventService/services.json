@@ -1,0 +1,6 @@
+{
+  "Task": "http://task",
+  "Reward": "http://reward",
+  "Account": "http://account",
+  "Notification": "http://notification"
+}

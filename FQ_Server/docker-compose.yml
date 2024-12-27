@@ -1,0 +1,124 @@
+version: '3.4'
+
+services:
+### external services
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "[TODO]"
+      POSTGRES_DB: "FQDB"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./FQ.DB:/docker-entrypoint-initdb.d
+    container_name: pgsql-fqdb
+    
+  nginx:
+    image: nginx:1.18.0-alpine
+    restart: always
+    ports:
+      - "8080:80"  
+      - "8081:81" 
+    volumes:
+      - ./Deploy/nginx:/etc/nginx/conf:ro
+    container_name: nginx
+
+  elasticsearch:
+    image: elasticsearch:7.6.0
+    environment:
+      - node.name=es01
+      - discovery.type=single-node
+    volumes:
+      - ./bin/elasticdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    container_name: elasticsearch
+
+  kibana:
+    image: kibana:7.6.0
+    ports:
+      - 5601:5601
+    container_name: kibana
+           
+### SystemServices      
+  routeservice:
+    image: ${DOCKER_REGISTRY-}routeservice
+    build:
+      context: .
+      dockerfile: FQ.WebServices/SystemServices/RouteService/Dockerfile   
+    container_name: route
+    depends_on:
+      - taskservice
+      - accountservice
+      - groupservice
+      - rewardservice
+      - mailservice
+      - eventservice
+      
+  eventservice:
+    image: ${DOCKER_REGISTRY-}eventservice
+    build:
+      context: .
+      dockerfile: FQ.WebServices/SystemServices/EventService/Dockerfile
+    container_name: event
+    depends_on:
+      - db
+
+  mailservice:
+    image: ${DOCKER_REGISTRY-}mailservice
+    build:
+      context: .
+      dockerfile: FQ.WebServices/SystemServices/MailService/Dockerfile
+    container_name: mail
+    depends_on:
+      - db 
+      
+  notificationservice:
+    image: ${DOCKER_REGISTRY-}notificationservice
+    build:
+      context: .
+      dockerfile: FQ.WebServices/SystemServices/NotificationService/Dockerfile
+    container_name: notification
+    depends_on:
+      - db 
+
+
+### EngineServices    
+
+  accountservice:
+    image: ${DOCKER_REGISTRY-}accountservice
+    build:
+      context: .
+      dockerfile: FQ.WebServices/EngineServices/AccountService/Dockerfile
+    container_name: account
+    depends_on:
+      - db
+
+  groupservice:
+    image: ${DOCKER_REGISTRY-}groupservice
+    build:
+      context: .
+      dockerfile: FQ.WebServices/EngineServices/GroupService/Dockerfile
+    container_name: group
+    depends_on:
+      - db
+
+  rewardservice:
+    image: ${DOCKER_REGISTRY-}rewardservice
+    build:
+      context: .
+      dockerfile: FQ.WebServices/EngineServices/RewardService/Dockerfile
+    container_name: reward
+    depends_on:
+      - db
+      
+  taskservice:
+    image: ${DOCKER_REGISTRY-}taskservice
+    build:
+      context: .
+      dockerfile: FQ.WebServices/EngineServices/TaskService/Dockerfile
+    container_name: task
+    depends_on:
+      - db

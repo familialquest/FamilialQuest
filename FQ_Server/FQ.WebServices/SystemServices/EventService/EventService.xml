@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EventService</name>
+    </assembly>
+    <members>
+        <member name="T:EventService.Services.EventServices">
+            <summary>
+            Реализация интерфейса сервиса-приёмника запросов клиента
+            </summary>
+        </member>
+        <member name="M:EventService.Services.EventServices.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Default constructor with HTTPContext
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:EventService.Services.EventServices.SendNotificationsAsync(CommonLib.FQRequestInfo,CommonTypes.HistoryEvent,System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Выполняет запрос к NotificationService для отправки оповещения по событию
+            </summary>
+            <param name="currentRequest">Запрос к этому серверу</param>
+            <param name="currentEvent">Текущее событие, по которому отправляется оповещение</param>
+            <returns>Task</returns>
+        </member>
+    </members>
+</doc>

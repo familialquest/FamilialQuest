@@ -1,0 +1,34 @@
+https://www.drivehq.com/help/doc/EnterpriseWebDAVSolution/EnterpriseWebDAV-DriveMapping.htm#_Toc391284300
+
+On linux host:
+$ apt-get install davfs2
+
+# choose No
+
+# create dir for mount point
+$ mkdir ~/fq-drivehq
+
+# use URL from DriveHQ to mount
+$ mount -t davfs [TODO] ~/fq-drivehq/
+
+
+https://www.digitalocean.com/community/tutorials/how-to-mirror-local-and-remote-directories-on-a-vps-with-lsyncd
+https://axkibe.github.io/lsyncd/
+
+
+$ sudo apt-get update
+$ sudo apt-get install lsyncd
+
+$ sudo mkdir /var/log/lsyncd
+$ touch /var/log/lsyncd/lsyncd.{log,status}
+$ sudo mkdir /etc/lsyncd
+
+# use lsyncd.conf.lua, copy it to /etc/lsyncd
+
+$ sudo service lsyncd start
+
+
+
+
+
+

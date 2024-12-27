@@ -1,0 +1,31 @@
+﻿CREATE USER taskServiceUser WITH PASSWORD '[TODO]';
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE Tasks TO taskServiceUser;
+
+CREATE USER rewardServiceUser WITH PASSWORD '[TODO]';
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE Rewards TO rewardServiceUser;
+
+CREATE USER groupServiceUser WITH PASSWORD '[TODO]';
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE Groups TO groupServiceUser;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE Subscriptions TO groupServiceUser;
+
+CREATE USER authServiceUser WITH PASSWORD '[TODO]';
+
+CREATE USER regServiceUser WITH PASSWORD '[TODO]';
+
+CREATE USER accountServiceUser WITH PASSWORD '[TODO]';
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE Accounts TO accountServiceUser;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE TempAccounts TO accountServiceUser;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE Users TO accountServiceUser;
+
+
+CREATE USER busServiceUser WITH PASSWORD '[TODO]';
+CREATE USER gateServiceUser WITH PASSWORD '[TODO]';
+CREATE USER routeServiceUser WITH PASSWORD '[TODO]';
+CREATE USER tokenServiceUser WITH PASSWORD '[TODO]';
+
+CREATE USER historyEventServiceUser WITH PASSWORD '[TODO]';
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE HistoryEvents TO historyEventServiceUser;
+
+CREATE USER notificationServiceUser WITH PASSWORD '[TODO]';
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE AccountDevices TO notificationServiceUser;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE AccountNotificationSubs TO notificationServiceUser;

@@ -1,0 +1,7 @@
+instances:
+  - name: 'elastic'
+    dns: [ 'elastic' ]
+  - name: 'kibana'
+    dns: [ 'kibana' ]
+  - name: 'logstash'
+    dns: [ 'logstash' ]

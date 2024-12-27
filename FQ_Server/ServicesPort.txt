@@ -1,0 +1,8 @@
+Rout			0
+Mail			2
+Event			5
+Notification	6
+Task			10
+Account			20
+Group			22
+Reward			23

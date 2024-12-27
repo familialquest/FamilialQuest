@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GroupService</name>
+    </assembly>
+    <members>
+        <member name="T:GroupService.Models.DBWorker">
+            <summary>
+            Класс для работы с запросами к сервису БД
+            </summary>
+        </member>
+        <member name="M:GroupService.Models.DBWorker.CreateGroup(CommonTypes.Group)">
+            <summary>
+            Создание новой группы
+            </summary>
+            <param name="inputGroup"></param>
+        </member>
+        <member name="M:GroupService.Models.DBWorker.UpdateGroup(CommonTypes.Group)">
+            <summary>
+            Обновление группы
+            </summary>
+            <param name="inputGroup"></param>
+        </member>
+        <member name="M:GroupService.Models.DBWorker.RemoveGroup(System.Guid)">
+            <summary>
+            Удаление группы
+            </summary>
+            <param name="groupId"></param>
+        </member>
+        <member name="M:GroupService.Models.DBWorker.GetGroup(System.Guid)">
+            <summary>
+            Получение инфы о группе
+            </summary>
+            <param name="groupId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GroupService.Services.GroupServices">
+            <summary>
+            Сервис управления группами
+            </summary>
+        </member>
+        <member name="M:GroupService.Services.GroupServices.GetGroupFromPostData(System.Object)">
+            <summary>
+             Дессериализация Group 
+            </summary>
+            <param name="inputParams">Json Group</param>
+            <returns></returns>
+        </member>
+        <member name="M:GroupService.Services.GroupServices.CreateGroup">
+            <summary>
+            Создание группы
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GroupService.Services.GroupServices.UpdateGroup(CommonLib.FQRequestInfo)">
+            <summary>
+            Обновление группы
+            </summary>
+            <param name="ri"></param>
+        </member>
+        <member name="M:GroupService.Services.GroupServices.RemoveGroup(CommonLib.FQRequestInfo)">
+            <summary>
+            Обновление информации о группе
+            </summary>
+            <param name="ri"></param>
+        </member>
+        <member name="M:GroupService.Services.GroupServices.GetGroup(CommonLib.FQRequestInfo)">
+            <summary>
+            Получение информации о группе
+            </summary>
+            <param name="ri"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GroupService.Services.IGroupServices">
+            <summary>
+            Интерфейс сервиса
+            </summary>
+        </member>
+        <member name="M:GroupService.Services.IGroupServices.CreateGroup">
+            <summary>
+            Создание группы
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GroupService.Services.IGroupServices.UpdateGroup(CommonLib.FQRequestInfo)">
+            <summary>
+            Обновление группы
+            </summary>
+            <param name="ri"></param>
+        </member>
+        <member name="M:GroupService.Services.IGroupServices.RemoveGroup(CommonLib.FQRequestInfo)">
+            <summary>
+            Удаление группы
+            </summary>
+            <param name="ri"></param>
+        </member>
+        <member name="M:GroupService.Services.IGroupServices.GetGroup(CommonLib.FQRequestInfo)">
+            <summary>
+            Получение информации о группе
+            </summary>
+            <param name="ri"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

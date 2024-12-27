@@ -1,0 +1,19 @@
+{
+  "AddTask": "INSERT INTO Tasks (id, Type, Name, Description, Cost, Penalty, AvailableUntil, SolutionTime, SpeedBonus, OwnerGroup, AvailableFor, Creator, Executor, Status, CreationDate, CompletionDate, ModificationTime) VALUES(@id, @Type, @Name, @Description, @Cost, @Penalty, @AvailableUntil, @SolutionTime, @SpeedBonus, @OwnerGroup, @AvailableFor, @Creator, @Executor, @Status, @CreationDate, @CompletionDate, @ModificationTime);",
+  "CountTaskTemplate": "SELECT COUNT(*) FROM Tasks WHERE {0}",
+  "GetAllTaskCount": "SELECT COUNT(*) FROM Tasks WHERE OwnerGroup = @OwnerGroup AND Status != @StatusDeleted;",
+  "GetActiveTaskCount": "SELECT COUNT(*) FROM Tasks WHERE OwnerGroup = @OwnerGroup AND (Status = @StatusAssigned OR Status = @StatusAccepted OR Status = @StatusInProgress OR Status = @StatusCompleted OR Status = @StatusPendingReview);",
+  "SearchTaskTemplate": "SELECT * FROM Tasks WHERE {0} ORDER BY ModificationTime DESC;",
+  "SearchUserTaskTemplate": "SELECT * FROM Tasks WHERE status != @StatusCreated AND status != @StatusClosed AND status != @StatusDeleted AND (Executor = @CurrentUser OR ((Executor = '00000000-0000-0000-0000-000000000000') AND ((AvailableFor @> ARRAY[@CurrentUser]::uuid[]) OR (AvailableFor='{}')))) ",
+  "SearchRelatedTasks": "SELECT ID FROM Tasks WHERE (OwnerGroup = @OwnerGroup) AND ((Executor = @RemovingUserId) OR ((AvailableFor @> ARRAY[@RemovingUserId]::uuid[]) AND (array_length(AvailableFor, 1) = 1)));",
+  "UpdateRelatedTasks": "UPDATE Tasks SET AvailableFor = array_remove(AvailableFor, @RemovingUserId), ModificationTime = @ModificationTime WHERE OwnerGroup = @OwnerGroup AND (AvailableFor @> ARRAY[@RemovingUserId]::uuid[]);",
+
+  //Зарезервировано
+  //"SearchRelatedTasks": "SELECT ID FROM Tasks WHERE (OwnerGroup = @OwnerGroup) AND (Status = 10 OR Status = 20 OR Status = 30  OR Status = 40  OR Status = 50) AND ((Executor = @RemovingUserId) OR ((AvailableFor @> ARRAY[@RemovingUserId]::uuid[]) AND (array_length(AvailableFor, 1) = 1)));",
+  //"UpdateRelatedTasks_Executor": "UPDATE Tasks SET Executor = @ExecutorGuidEmpty, ModificationTime = @ModificationTime WHERE OwnerGroup = @OwnerGroup AND Executor = @RemovingUserId;",
+  //"UpdateRelatedTasks_AvailableFor": "UPDATE Tasks SET AvailableFor = array_remove(AvailableFor, @RemovingUserId), ModificationTime = @ModificationTime WHERE OwnerGroup = @OwnerGroup AND (AvailableFor @> ARRAY[@RemovingUserId]::uuid[]);",
+
+  "UpdateTaskTemplate": "UPDATE Tasks SET {0} WHERE id=@id AND OwnerGroup = @OwnerGroup;",
+  "DeleteTask": "DELETE FROM Tasks WHERE id=@id AND OwnerGroup = @OwnerGroup;",
+  "DeleteTaskTemplate": "DELETE FROM Tasks WHERE {0}"
+}

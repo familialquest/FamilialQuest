@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+sitemap: https://familialquest.com/sitemap.xml

@@ -1,0 +1,8 @@
+{
+  "ClearTokensForDeviceAndUser": "UPDATE AccountDevices SET RegToken='' WHERE DeviceID = @DeviceID OR UserID = @UserID;",
+  "ClearTokensForUser": "UPDATE AccountDevices SET RegToken='' WHERE UserID = @UserID;",
+  "AddDeviceToUser": "INSERT INTO AccountDevices (UserID, DeviceID, RegToken) VALUES (@UserID, @DeviceID, @RegToken) ON CONFLICT (UserID, DeviceID) DO UPDATE SET RegToken=@RegToken;",
+  "RemoveDeviceFromUser": "DELETE FROM AccountDevices WHERE UserID=@UserID AND DeviceID=@DeviceID;",
+  "GetDeviceForUser": "SELECT * FROM AccountDevices WHERE UserID=@UserID",
+  "SetUserSubscription": "INSERT INTO AccountNotificationSubs (UserID, IsSubscribed) VALUES (@UserID, @IsSubscribed) ON CONFLICT (UserID) DO UPDATE SET IsSubscribed=@IsSubscribed;"
+}

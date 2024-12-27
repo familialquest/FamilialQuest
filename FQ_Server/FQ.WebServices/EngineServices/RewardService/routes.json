@@ -1,0 +1,5 @@
+{
+  "GetUsersById": "Account",
+  "WriteOffCost": "Account",
+  "CreateHistoryEvent": "Event"
+}
